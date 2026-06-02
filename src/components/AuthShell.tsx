@@ -12,10 +12,10 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
           initial={{ opacity: 0, y: 20, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-4xl grid md:grid-cols-2 bg-card rounded-2xl overflow-hidden"
+          className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 bg-card rounded-2xl overflow-hidden"
           style={{ boxShadow: "var(--shadow-elegant)" }}
         >
-          <div className="p-8 md:p-10">
+          <div className="p-6 sm:p-8 md:p-10">
             <Logo className="mb-8" />
             <motion.h1
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}

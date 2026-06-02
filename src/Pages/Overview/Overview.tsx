@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { Plus, Search, Bell, Headphones } from "lucide-react";
 import { motion } from "motion/react";
 
 export const Route = createFileRoute("/overview")({
@@ -74,25 +74,55 @@ const scheduleRows = [
 
 function Overview() {
   return (
-    <div className="p-6 lg:p-8 overflow-y-auto space-y-8">
+    <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto space-y-8">
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+        className="space-y-4 rounded-[2rem] border border-border bg-card p-4 sm:p-5 lg:p-6"
       >
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground">
-            Commercial Office Building
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0 space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-4 py-2 text-sm text-muted-foreground">
+              Commercial Office Building
+            </div>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-4">
+              <div className="min-w-0">
+                <h1 className="truncate text-2xl font-semibold sm:text-3xl">Riverside Corporate Plaza</h1>
+                <p className="mt-1 text-sm text-muted-foreground">Trending up this month. Increase due to approved changes.</p>
+              </div>
+              <button className="inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:brightness-110 whitespace-nowrap">
+                <Plus className="h-4 w-4" /> Add Quick View
+              </button>
+            </div>
           </div>
-          <h1 className="mt-4 text-3xl font-semibold">Riverside Corporate Plaza</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Trending up this month. Increase due to approved changes.
-          </p>
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between lg:w-[48%] xl:w-[40%]">
+            <div className="flex w-full items-center rounded-2xl border border-border bg-secondary px-4 py-2">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input
+                placeholder="Search projects, files, people..."
+                className="ml-3 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              <button className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-secondary text-foreground transition hover:bg-secondary/90">
+                <Headphones className="h-5 w-5" />
+              </button>
+              <button className="relative inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-secondary text-foreground transition hover:bg-secondary/90">
+                <Bell className="h-5 w-5" />
+                <span className="absolute -right-0.5 top-0.5 h-2 w-2 rounded-full bg-destructive ring-2 ring-background" />
+              </button>
+              <button className="inline-flex items-center gap-3 rounded-full border border-border bg-secondary px-4 py-2 text-sm transition hover:bg-secondary/90">
+                <div className="h-10 w-10 rounded-full bg-linear-to-r from-pink-500 via-fuchsia-500 to-purple-500" />
+                <div className="hidden min-w-0 flex-col gap-1 sm:flex">
+                  <span className="truncate font-semibold">Musiq</span>
+                  <span className="truncate text-xs text-muted-foreground">@musiq</span>
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
-        <button className="inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition hover:brightness-110">
-          <Plus className="h-4 w-4" /> Add Quick View
-        </button>
       </motion.div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

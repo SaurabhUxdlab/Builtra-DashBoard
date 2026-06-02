@@ -66,8 +66,8 @@ function Landing() {
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7, delay: 0.1 }} className="relative">
-            <div className="rounded-2xl overflow-hidden" style={{ boxShadow: "var(--shadow-elegant)" }}>
-              <img src={worker} alt="Construction site manager using Builtraa" width={896} height={1024} className="w-full h-[480px] object-cover" />
+            <div className="rounded-2xl overflow-hidden aspect-9/10 sm:aspect-4/5 lg:aspect-auto" style={{ boxShadow: "var(--shadow-elegant)" }}>
+              <img src={worker} alt="Construction site manager using Builtraa" width={896} height={1024} className="w-full h-full object-cover" />
             </div>
           </motion.div>
         </div>

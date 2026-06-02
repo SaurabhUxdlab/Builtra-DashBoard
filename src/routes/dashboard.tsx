@@ -15,18 +15,18 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
-      {sidebarOpen && <Sidebar />}
+    <div className="h-screen overflow-hidden flex bg-background text-foreground">
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <main className="flex-1 flex flex-col min-w-0">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="flex items-center justify-between gap-4 px-6 py-4 border-b border-border bg-card">
           <div className="flex items-center gap-4">
             <button
-              className="p-2 rounded-xl hover:bg-secondary transition"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-xl hover:bg-secondary transition lg:hidden"
+              onClick={() => setSidebarOpen(true)}
             >
               <SidebarIcon className="h-5 w-5 text-primary" />
             </button>
@@ -56,11 +56,6 @@ function Dashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to="/overview">
-              <button className="rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:brightness-110">
-                Overview
-              </button>
-            </Link>
             <button className="rounded-2xl p-2 hover:bg-secondary transition">
               <Headphones className="h-5 w-5 text-foreground" />
             </button>
