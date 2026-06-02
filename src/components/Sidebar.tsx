@@ -3,12 +3,12 @@ import { motion } from "motion/react";
 import {
   Home, Users, FolderOpen, Image as ImageIcon, MessageSquare,
   ClipboardList, FileText, Search, Pencil, ListChecks, Megaphone,
-  Handshake, AlertTriangle, Mail, HardHat, BookUser, Calendar, ChevronDown, Edit3,
+  Handshake, AlertTriangle, Mail, HardHat, BookUser, Calendar, ChevronDown, Edit3 
 } from "lucide-react";
 import { Logo } from "./Logo";
 
 const overview = [
-  { title: "Overview", url: "/dashboard", icon: Home },
+  { title: "Overview", url: "/overview", icon: Home },
   { title: "Team", url: "#", icon: Users },
   { title: "Documents", url: "#", icon: FolderOpen },
   { title: "Photos", url: "#", icon: ImageIcon },
@@ -33,7 +33,7 @@ export function Sidebar() {
   const path = useRouterState({ select: (r) => r.location.pathname });
   return (
     <aside className="hidden lg:flex w-72 shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
-      <div className="px-6 py-5 border-b border-sidebar-border">
+      <div className="px-6 py-5 border-b border-sidebar-border flex items-center justify-between">
         <Logo />
       </div>
       <div className="px-4 py-4 border-b border-sidebar-border">
