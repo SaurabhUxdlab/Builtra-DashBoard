@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import { type ReactNode } from "react";
-import { Search, Bell, ChevronDown, Layers, ClipboardList, FileText, CheckSquare, Users } from "lucide-react";
+import { 
+  Search, Bell, ChevronDown, LayoutGrid, Filter, Plus, Headphones 
+} from "lucide-react";
 import worker from "../../public/construction-worker.jpg";
 import { Logo } from "./Logo";
 
@@ -13,105 +15,123 @@ function MockDashboard({ isLoading }: { isLoading?: boolean }) {
         opacity: isLoading ? 1 : 0.75,
       }}
       transition={{ duration: 1.5, ease: "easeInOut" }}
-      className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none bg-background flex flex-col"
+      className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none bg-neutral-50 flex flex-col w-full"
     >
-      {/* Top Banner with gradient */}
-      <div className="w-full h-48 shrink-0 relative" style={{ background: "var(--gradient-brand)" }}>
-        {/* Mock Header */}
-        <div className="flex items-center justify-between px-12 h-20 text-white/90 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-bold text-lg text-white">B</div>
-            <span className="text-xl font-bold tracking-tight text-white">Builtraa</span>
-          </div>
-
-          <div className="w-1/3 max-w-md h-10 rounded-2xl bg-white/15 border border-white/15 px-4 flex items-center gap-2">
-            <Search className="h-4 w-4 text-white/50" />
-            <span className="text-white/40 text-sm">Search projects, tasks, files...</span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
-              <Bell className="h-4 w-4 text-white/80" />
-            </div>
-            <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-1">
-              <div className="w-6 h-6 rounded-full bg-white/30" />
-              <span className="text-xs text-white/80 font-medium">Musiq</span>
-              <ChevronDown className="h-3 w-3 text-white/80" />
-            </div>
+      {/* Black top header */}
+      <div className="bg-black text-white px-6 py-3 flex items-center justify-between border-b border-neutral-800 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#EA1B53] flex items-center justify-center font-bold text-white text-base">B</div>
+          <span className="text-xl font-bold tracking-tight text-white">Builtraa</span>
+        </div>
+        
+        <div className="flex-1 max-w-xl mx-8">
+          <div className="relative flex items-center bg-[#1C1C1E] border border-neutral-800 rounded-xl px-4 py-2 shadow-inner">
+            <Search className="h-4 w-4 text-neutral-500 mr-3 shrink-0" />
+            <div className="text-sm text-neutral-500">Search or Ask a question...</div>
           </div>
         </div>
-
-        {/* Mock Secondary Header/Breadcrumb area */}
-        <div className="flex items-center justify-between px-12 h-14 text-white/90">
-          <div className="flex items-center gap-6 text-sm font-semibold">
-            <span className="border-b-2 border-white pb-1 text-white">Projects</span>
-            <span className="opacity-60">Punch List</span>
-            <span className="opacity-60">Daily Logs</span>
-            <span className="opacity-60">Drawings</span>
-            <span className="opacity-60">Crews</span>
+        
+        <div className="flex items-center gap-4">
+          <div className="h-10 w-10 rounded-full flex items-center justify-center bg-[#EA1B53]/15 text-[#EA1B53] border border-[#EA1B53]/25">
+            <Headphones className="h-4 w-4" />
           </div>
-          <div className="h-9 w-28 rounded-lg bg-white/20 border border-white/10" />
+          <div className="relative h-10 w-10 rounded-full flex items-center justify-center bg-[#EA1B53]/15 text-[#EA1B53] border border-[#EA1B53]/25">
+            <Bell className="h-4 w-4" />
+            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[#EA1B53]" />
+          </div>
+          
+          <div className="flex items-center gap-3 pl-2 border-l border-neutral-800">
+            <div className="h-9 w-9 rounded-full bg-[url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-700" />
+            <div className="flex flex-col text-left">
+              <span className="text-sm font-semibold leading-none">Musiq</span>
+              <span className="text-[10px] text-neutral-500 leading-none mt-1">musiq@gmail.com</span>
+            </div>
+            <ChevronDown className="h-3 w-3 text-neutral-400" />
+          </div>
         </div>
       </div>
 
-      {/* Mock Main Dashboard Body */}
-      <div className="flex-1 flex px-12 py-8 gap-8 bg-secondary/30">
-        {/* Left Sidebar */}
-        <div className="w-64 shrink-0 flex flex-col gap-2">
-          <div className="h-9 rounded-xl bg-card border border-border/80 shadow-sm px-4 flex items-center gap-3 text-sm text-foreground/80">
-            <Layers className="h-4 w-4 text-primary" />
-            <span className="font-semibold text-primary">Overview</span>
+      {/* Subheader */}
+      <div className="bg-white border-b border-neutral-200 py-4 px-6 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 text-neutral-900 font-bold text-lg">
+            <LayoutGrid className="h-5 w-5 text-[#EA1B53]" />
+            <span>Portfolio</span>
           </div>
-          <div className="h-9 rounded-xl bg-transparent px-4 flex items-center gap-3 text-sm text-muted-foreground">
-            <ClipboardList className="h-4 w-4" />
-            <span>Punch List</span>
+          <div className="flex items-center gap-4 text-sm font-medium border-l border-neutral-200 pl-6 h-6">
+            <div className="text-[#EA1B53] border-b-2 border-[#EA1B53] pb-1 h-full font-semibold">
+              Projects
+            </div>
+            <div className="text-neutral-500 pb-1 h-full">
+              Executive Dashboard
+            </div>
           </div>
-          <div className="h-9 rounded-xl bg-transparent px-4 flex items-center gap-3 text-sm text-muted-foreground">
-            <FileText className="h-4 w-4" />
-            <span>Daily Logs</span>
+        </div>
+      </div>
+
+      {/* Search and table */}
+      <div className="flex-1 p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 flex-1 max-w-md">
+            <div className="relative flex-1 flex items-center bg-white border border-neutral-200 rounded-xl px-4 py-2.5 shadow-sm">
+              <Search className="h-4 w-4 text-neutral-400 mr-2.5 shrink-0" />
+              <div className="text-sm text-neutral-400">Search Projects</div>
+            </div>
+            <div className="h-10 w-10 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-600">
+              <Filter className="h-4 w-4" />
+            </div>
           </div>
-          <div className="h-9 rounded-xl bg-transparent px-4 flex items-center gap-3 text-sm text-muted-foreground">
-            <CheckSquare className="h-4 w-4" />
-            <span>Tasks</span>
-          </div>
-          <div className="h-9 rounded-xl bg-transparent px-4 flex items-center gap-3 text-sm text-muted-foreground">
-            <Users className="h-4 w-4" />
-            <span>Crews</span>
+          
+          <div className="bg-[#EA1B53] text-white font-semibold text-sm rounded-xl px-5 py-2.5 flex items-center gap-2">
+            <Plus className="h-4 w-4" />
+            <span>New Project</span>
           </div>
         </div>
 
-        {/* Right Content Pane - A mock Table */}
-        <div className="flex-1 bg-card rounded-2xl border border-border shadow-sm p-6 flex flex-col gap-6">
-          <div className="flex items-center justify-between border-b border-border pb-4">
-            <div className="flex flex-col gap-1">
-              <div className="h-5 bg-muted rounded w-48" />
-              <div className="h-3 bg-muted rounded w-32" />
-            </div>
-            <div className="w-32 h-9 rounded-lg bg-muted border border-border" />
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center justify-between border-b border-border/50 pb-4 last:border-b-0 last:pb-0">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center font-bold text-muted-foreground">
-                    P{i}
+        {/* Table */}
+        <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-500 font-semibold text-[11px] uppercase tracking-wider">
+                <th className="py-4 px-6">Name</th>
+                <th className="py-4 px-4">Project Number</th>
+                <th className="py-4 px-4">Address</th>
+                <th className="py-4 px-4">City</th>
+                <th className="py-4 px-4">State</th>
+                <th className="py-4 px-4">Zip</th>
+                <th className="py-4 px-4">Phone</th>
+                <th className="py-4 px-4">Status</th>
+                <th className="py-4 px-4">Stage</th>
+                <th className="py-4 px-6 text-right"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-100 text-sm">
+              <tr>
+                <td className="py-4 px-6 font-medium text-neutral-900">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-[url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-200 shrink-0 shadow-sm" />
+                    <span className="text-[#EA1B53] font-bold">Riverside Corporate Plaza</span>
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <div className="h-4 bg-muted rounded w-44" />
-                    <div className="h-3 bg-muted rounded w-28" />
+                </td>
+                <td className="py-4 px-4 text-neutral-600 font-mono text-xs">TK-001</td>
+                <td className="py-4 px-4 text-neutral-600">9 Bobbink Terrace</td>
+                <td className="py-4 px-4 text-neutral-600">East Rutherford</td>
+                <td className="py-4 px-4 text-neutral-600">New Jersey</td>
+                <td className="py-4 px-4 text-neutral-600 font-mono text-xs">07073</td>
+                <td className="py-4 px-4 text-neutral-600 font-mono text-xs">8668224449</td>
+                <td className="py-4 px-4">
+                  <div className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold text-xs">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                    <span>Active*</span>
                   </div>
-                </div>
-                <div className="flex items-center gap-8">
-                  <div className="h-4 bg-muted rounded w-24" />
-                  <div className="h-4 bg-muted rounded w-16" />
-                  <div className="w-20 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs font-semibold">
-                    Active
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                </td>
+                <td className="py-4 px-4 text-neutral-600">Bidding</td>
+                <td className="py-4 px-6 text-right text-[#EA1B53] font-bold text-xs">
+                  Go to Workspace &gt;
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </motion.div>

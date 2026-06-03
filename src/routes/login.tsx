@@ -19,7 +19,9 @@ function Login() {
     setIsLoading(true);
     // Simulate login - replace with actual API call and animate blur transition
     setTimeout(() => {
-      setIsLoading(false);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("just_logged_in", "true");
+      }
       navigate({ to: "/dashboard" });
     }, 1500);
   };
@@ -29,7 +31,7 @@ function Login() {
       <motion.form 
         className="space-y-4" 
         onSubmit={handleSubmit}
-        animate={isLoading ? { opacity: 0.5, filter: "blur(4px)" } : { opacity: 1, filter: "blur(0px)" }}
+        animate={isLoading ? { opacity: 0.5, filter: "blur(5px)" } : { opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.3 }}
       >
         <div>
