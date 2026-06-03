@@ -10,6 +10,7 @@ import { Logo } from "./Logo";
 type SidebarProps = {
   open?: boolean;
   onClose?: () => void;
+  collapsed?: boolean;
 };
 
 const overview = [
@@ -34,12 +35,13 @@ const tools = [
   { title: "Schedule", icon: Calendar },
 ];
 
-export function Sidebar({ open = false, onClose }: SidebarProps) {
+export function Sidebar({ open = false, onClose, collapsed = false }: SidebarProps) {
   const path = useRouterState({ select: (r) => r.location.pathname });
 
   return (
     <>
-      <aside className="hidden lg:flex w-60 shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
+      {!collapsed && (
+        <aside className="hidden lg:flex w-60 shrink-0 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
         <div className="px-6 py-5 border-b border-sidebar-border flex items-center justify-between">
           <Logo />
         </div>
@@ -82,7 +84,8 @@ export function Sidebar({ open = false, onClose }: SidebarProps) {
             </ul>
           </div>
         </nav>
-      </aside>
+        </aside>
+      )}
 
       <div className={`fixed inset-0 z-40 lg:hidden ${open ? "block" : "hidden"}`}>
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />

@@ -16,17 +16,24 @@ export const Route = createFileRoute("/dashboard")({
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <div className="h-screen overflow-hidden flex bg-background text-foreground">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} collapsed={sidebarCollapsed} onClose={() => setSidebarOpen(false)} />
 
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="flex items-center justify-between gap-4 px-6 py-4 border-b border-border bg-card">
           <div className="flex items-center gap-4">
             <button
-              className="p-2 rounded-xl hover:bg-secondary transition lg:hidden"
-              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-xl hover:bg-secondary transition"
+              onClick={() => {
+                if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
+                  setSidebarCollapsed((s) => !s);
+                } else {
+                  setSidebarOpen(true);
+                }
+              }}
             >
               <SidebarIcon className="h-5 w-5 text-primary" />
             </button>
