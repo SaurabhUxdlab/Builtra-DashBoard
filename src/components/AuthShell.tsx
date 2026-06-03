@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { type ReactNode } from "react";
-import worker from "@/assets/construction-worker.jpg";
+import worker from "../../public/construction-worker.jpg";
 import { Logo } from "./Logo";
 
 export function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {

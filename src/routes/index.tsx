@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { ArrowRight, ShieldCheck, BarChart3, HardHat, Building2, ClipboardList, MessageSquare } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import worker from "@/assets/construction-worker.jpg";
+import worker from "../../public/construction-worker.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({

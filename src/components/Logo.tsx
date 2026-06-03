@@ -1,4 +1,4 @@
-import logo from "@/assets/builtraa-logo.png";
+import logo from "../../public/builtraa-logo.png";
 
 export function Logo({ className = "", showText = true }: { className?: string; showText?: boolean }) {
   return (
