@@ -19,7 +19,12 @@ function Dashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="h-screen overflow-hidden flex bg-background text-foreground">
+    <motion.div 
+      initial={{ opacity: 0, filter: "blur(12px)" }}
+      animate={{ opacity: 1, filter: "blur(0px)" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="h-screen overflow-hidden flex bg-background text-foreground w-full"
+    >
       <Sidebar open={sidebarOpen} collapsed={sidebarCollapsed} onClose={() => setSidebarOpen(false)} />
 
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -80,6 +85,6 @@ function Dashboard() {
           </div>
         </header>
       </main>
-    </div>
+    </motion.div>
   );
 }

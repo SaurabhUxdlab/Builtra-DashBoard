@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { AuthShell } from "@/components/AuthShell";
@@ -12,18 +12,20 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login - replace with actual API call
+    // Simulate login - replace with actual API call and animate blur transition
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+      navigate({ to: "/dashboard" });
+    }, 1500);
   };
   
   return (
-    <AuthShell title="Welcome Back" subtitle="Login to your Builtraa account.">
+    <AuthShell title="Welcome Back" subtitle="Login to your Builtraa account." isLoading={isLoading}>
       <motion.form 
         className="space-y-4" 
         onSubmit={handleSubmit}
