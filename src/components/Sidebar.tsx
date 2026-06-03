@@ -15,7 +15,7 @@ type SidebarProps = {
 };
 
 const overview = [
-  { title: "Overview", url: "/overview", icon: Home },
+  { title: "Overview", url: "/dashboard/overview", icon: Home },
   { title: "Team", url: "#", icon: Users },
   { title: "Documents", url: "#", icon: FolderOpen },
   { title: "Photos", url: "#", icon: ImageIcon },
