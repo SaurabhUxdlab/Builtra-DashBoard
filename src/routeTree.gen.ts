@@ -10,8 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ScheduleRouteImport } from './routes/schedule'
+import { Route as PunchListRouteImport } from './routes/punch-list'
+import { Route as ObservationsRouteImport } from './routes/observations'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DrawingRouteImport } from './routes/drawing'
+import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DailyLogRouteImport } from './routes/daily-log'
+import { Route as CrewsRouteImport } from './routes/crews'
+import { Route as CorrespondenceRouteImport } from './routes/correspondence'
+import { Route as CoordinationIssuesRouteImport } from './routes/coordination-Issues'
+import { Route as CommitmentsRouteImport } from './routes/commitments'
+import { Route as AnnouncementsRouteImport } from './routes/announcements'
+import { Route as ActionPlansRouteImport } from './routes/action-plans'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SignupRoute = SignupRouteImport.update({
@@ -19,14 +31,74 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScheduleRoute = ScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PunchListRoute = PunchListRouteImport.update({
+  id: '/punch-list',
+  path: '/punch-list',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObservationsRoute = ObservationsRouteImport.update({
+  id: '/observations',
+  path: '/observations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DrawingRoute = DrawingRouteImport.update({
+  id: '/drawing',
+  path: '/drawing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DirectoryRoute = DirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DailyLogRoute = DailyLogRouteImport.update({
+  id: '/daily-log',
+  path: '/daily-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrewsRoute = CrewsRouteImport.update({
+  id: '/crews',
+  path: '/crews',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CorrespondenceRoute = CorrespondenceRouteImport.update({
+  id: '/correspondence',
+  path: '/correspondence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoordinationIssuesRoute = CoordinationIssuesRouteImport.update({
+  id: '/coordination-Issues',
+  path: '/coordination-Issues',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommitmentsRoute = CommitmentsRouteImport.update({
+  id: '/commitments',
+  path: '/commitments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnnouncementsRoute = AnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActionPlansRoute = ActionPlansRouteImport.update({
+  id: '/action-plans',
+  path: '/action-plans',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,35 +109,132 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/action-plans': typeof ActionPlansRoute
+  '/announcements': typeof AnnouncementsRoute
+  '/commitments': typeof CommitmentsRoute
+  '/coordination-Issues': typeof CoordinationIssuesRoute
+  '/correspondence': typeof CorrespondenceRoute
+  '/crews': typeof CrewsRoute
+  '/daily-log': typeof DailyLogRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
+  '/observations': typeof ObservationsRoute
+  '/punch-list': typeof PunchListRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/action-plans': typeof ActionPlansRoute
+  '/announcements': typeof AnnouncementsRoute
+  '/commitments': typeof CommitmentsRoute
+  '/coordination-Issues': typeof CoordinationIssuesRoute
+  '/correspondence': typeof CorrespondenceRoute
+  '/crews': typeof CrewsRoute
+  '/daily-log': typeof DailyLogRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
+  '/observations': typeof ObservationsRoute
+  '/punch-list': typeof PunchListRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/action-plans': typeof ActionPlansRoute
+  '/announcements': typeof AnnouncementsRoute
+  '/commitments': typeof CommitmentsRoute
+  '/coordination-Issues': typeof CoordinationIssuesRoute
+  '/correspondence': typeof CorrespondenceRoute
+  '/crews': typeof CrewsRoute
+  '/daily-log': typeof DailyLogRoute
   '/dashboard': typeof DashboardRoute
+  '/directory': typeof DirectoryRoute
+  '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
+  '/observations': typeof ObservationsRoute
+  '/punch-list': typeof PunchListRoute
+  '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/action-plans'
+    | '/announcements'
+    | '/commitments'
+    | '/coordination-Issues'
+    | '/correspondence'
+    | '/crews'
+    | '/daily-log'
+    | '/dashboard'
+    | '/directory'
+    | '/drawing'
+    | '/login'
+    | '/observations'
+    | '/punch-list'
+    | '/schedule'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/signup'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/action-plans'
+    | '/announcements'
+    | '/commitments'
+    | '/coordination-Issues'
+    | '/correspondence'
+    | '/crews'
+    | '/daily-log'
+    | '/dashboard'
+    | '/directory'
+    | '/drawing'
+    | '/login'
+    | '/observations'
+    | '/punch-list'
+    | '/schedule'
+    | '/signup'
+  id:
+    | '__root__'
+    | '/'
+    | '/action-plans'
+    | '/announcements'
+    | '/commitments'
+    | '/coordination-Issues'
+    | '/correspondence'
+    | '/crews'
+    | '/daily-log'
+    | '/dashboard'
+    | '/directory'
+    | '/drawing'
+    | '/login'
+    | '/observations'
+    | '/punch-list'
+    | '/schedule'
+    | '/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActionPlansRoute: typeof ActionPlansRoute
+  AnnouncementsRoute: typeof AnnouncementsRoute
+  CommitmentsRoute: typeof CommitmentsRoute
+  CoordinationIssuesRoute: typeof CoordinationIssuesRoute
+  CorrespondenceRoute: typeof CorrespondenceRoute
+  CrewsRoute: typeof CrewsRoute
+  DailyLogRoute: typeof DailyLogRoute
   DashboardRoute: typeof DashboardRoute
+  DirectoryRoute: typeof DirectoryRoute
+  DrawingRoute: typeof DrawingRoute
   LoginRoute: typeof LoginRoute
+  ObservationsRoute: typeof ObservationsRoute
+  PunchListRoute: typeof PunchListRoute
+  ScheduleRoute: typeof ScheduleRoute
   SignupRoute: typeof SignupRoute
 }
 
@@ -78,6 +247,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schedule': {
+      id: '/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof ScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/punch-list': {
+      id: '/punch-list'
+      path: '/punch-list'
+      fullPath: '/punch-list'
+      preLoaderRoute: typeof PunchListRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/observations': {
+      id: '/observations'
+      path: '/observations'
+      fullPath: '/observations'
+      preLoaderRoute: typeof ObservationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -85,11 +275,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/drawing': {
+      id: '/drawing'
+      path: '/drawing'
+      fullPath: '/drawing'
+      preLoaderRoute: typeof DrawingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/directory': {
+      id: '/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof DirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/daily-log': {
+      id: '/daily-log'
+      path: '/daily-log'
+      fullPath: '/daily-log'
+      preLoaderRoute: typeof DailyLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crews': {
+      id: '/crews'
+      path: '/crews'
+      fullPath: '/crews'
+      preLoaderRoute: typeof CrewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/correspondence': {
+      id: '/correspondence'
+      path: '/correspondence'
+      fullPath: '/correspondence'
+      preLoaderRoute: typeof CorrespondenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coordination-Issues': {
+      id: '/coordination-Issues'
+      path: '/coordination-Issues'
+      fullPath: '/coordination-Issues'
+      preLoaderRoute: typeof CoordinationIssuesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commitments': {
+      id: '/commitments'
+      path: '/commitments'
+      fullPath: '/commitments'
+      preLoaderRoute: typeof CommitmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/announcements': {
+      id: '/announcements'
+      path: '/announcements'
+      fullPath: '/announcements'
+      preLoaderRoute: typeof AnnouncementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/action-plans': {
+      id: '/action-plans'
+      path: '/action-plans'
+      fullPath: '/action-plans'
+      preLoaderRoute: typeof ActionPlansRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,8 +357,20 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActionPlansRoute: ActionPlansRoute,
+  AnnouncementsRoute: AnnouncementsRoute,
+  CommitmentsRoute: CommitmentsRoute,
+  CoordinationIssuesRoute: CoordinationIssuesRoute,
+  CorrespondenceRoute: CorrespondenceRoute,
+  CrewsRoute: CrewsRoute,
+  DailyLogRoute: DailyLogRoute,
   DashboardRoute: DashboardRoute,
+  DirectoryRoute: DirectoryRoute,
+  DrawingRoute: DrawingRoute,
   LoginRoute: LoginRoute,
+  ObservationsRoute: ObservationsRoute,
+  PunchListRoute: PunchListRoute,
+  ScheduleRoute: ScheduleRoute,
   SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
