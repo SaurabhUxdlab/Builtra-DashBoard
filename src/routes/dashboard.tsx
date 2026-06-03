@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { 
   Bell, Search, Plus, SidebarIcon, Headphones, ChevronDown, 
-  LayoutGrid, Filter, X, ArrowLeft
+  LayoutGrid, Filter, X, ArrowLeft, Sparkles
 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
@@ -40,7 +40,7 @@ const DEFAULT_PROJECTS: Project[] = [
     city: "East Rutherford",
     state: "New Jersey",
     zip: "07073",
-    phone: "8668224449",
+    phone: "8658224449",
     status: "Active",
     stage: "Bidding",
     image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=80&q=80",
@@ -114,7 +114,7 @@ function Dashboard() {
       city: form.city || "East Rutherford",
       state: form.state || "New Jersey",
       zip: form.zip || "07073",
-      phone: form.phone || "8668224449",
+      phone: form.phone || "8658224449",
       status: form.status,
       stage: form.stage,
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=80&h=80&q=80",
@@ -243,39 +243,38 @@ function Dashboard() {
           {/* Black top header */}
           <header className="bg-black text-white px-6 py-3 flex items-center justify-between border-b border-neutral-800 shrink-0">
             <div className="flex items-center gap-3 select-none">
-              <div className="w-8 h-8 rounded-lg bg-[#EA1B53] flex items-center justify-center font-bold text-white text-base">B</div>
+              <img src="/builtraa-logo.png" alt="Builtraa Logo" className="h-8 w-8 object-contain rounded-lg" />
               <span className="text-xl font-bold tracking-tight text-white">Builtraa</span>
             </div>
             
             <div className="flex-1 max-w-xl mx-8">
-              <div className="relative flex items-center bg-[#1C1C1E] border border-neutral-800 rounded-xl px-4 py-2 shadow-inner focus-within:border-neutral-700 transition">
-                <Search className="h-4 w-4 text-neutral-400 mr-3 shrink-0" />
+              <div className="relative flex items-center bg-white border border-neutral-200 rounded-xl px-4 py-2 shadow-sm focus-within:border-neutral-300 transition">
+                <Sparkles className="h-4 w-4 text-[#EA1B53] mr-3 shrink-0" />
                 <input 
-                  placeholder="Search or Ask a question..." 
+                  placeholder="Search or Ask a question.." 
                   value={globalSearch}
                   onChange={(e) => setGlobalSearch(e.target.value)}
-                  className="w-full bg-transparent text-sm text-white outline-none placeholder:text-neutral-500"
+                  className="w-full bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
                 />
               </div>
             </div>
             
             <div className="flex items-center gap-4">
-              <button className="h-10 w-10 rounded-full flex items-center justify-center bg-[#EA1B53]/15 text-[#EA1B53] border border-[#EA1B53]/25 hover:bg-[#EA1B53]/25 transition">
+              <button className="h-10 w-10 rounded-xl flex items-center justify-center bg-[#EA1B53] text-white hover:bg-[#D01648] transition shadow-sm cursor-pointer border-0">
                 <Headphones className="h-4 w-4" />
               </button>
-              <button className="relative h-10 w-10 rounded-full flex items-center justify-center bg-[#EA1B53]/15 text-[#EA1B53] border border-[#EA1B53]/25 hover:bg-[#EA1B53]/25 transition">
+              <button className="relative h-10 w-10 rounded-xl flex items-center justify-center bg-[#EA1B53] text-white hover:bg-[#D01648] transition shadow-sm cursor-pointer border-0">
                 <Bell className="h-4 w-4" />
-                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-[#EA1B53]" />
               </button>
               
               {/* Profile Card */}
-              <div className="flex items-center gap-3 pl-2 border-l border-neutral-800 cursor-pointer hover:opacity-85 select-none">
-                <div className="h-9 w-9 rounded-full bg-[url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-700" />
+              <div className="flex items-center gap-3 bg-white hover:bg-neutral-50 border border-neutral-200 rounded-full px-3 py-1.5 shadow-sm cursor-pointer transition select-none">
+                <div className="h-8 w-8 rounded-full bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80&q=80')] bg-cover bg-center border border-neutral-200" />
                 <div className="hidden flex-col md:flex text-left">
-                  <span className="text-sm font-semibold leading-none">Musiq</span>
-                  <span className="text-[10px] text-neutral-500 leading-none mt-1">musiq@gmail.com</span>
+                  <span className="text-xs font-bold leading-none text-neutral-800">Musfiq</span>
+                  <span className="text-[9px] text-neutral-400 leading-none mt-0.5">musfiq@gmail.com</span>
                 </div>
-                <ChevronDown className="h-3 w-3 text-neutral-400" />
+                <ChevronDown className="h-3.5 w-3.5 text-neutral-500" />
               </div>
             </div>
           </header>
@@ -300,102 +299,100 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Main Portfolio table and search controls */}
-          <div className="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full flex flex-col gap-6">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-2 flex-1 max-w-md">
-                <div className="relative flex-1 flex items-center bg-white border border-neutral-200 rounded-xl px-4 py-2.5 shadow-sm focus-within:border-neutral-300 transition">
-                  <Search className="h-4 w-4 text-neutral-400 mr-2.5 shrink-0" />
-                  <input 
-                    placeholder="Search Projects"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
-                  />
+          <div className="flex-1 p-5 w-full flex flex-col">
+            <div className="bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden p-5 flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="relative flex items-center bg-[#F3F4F6] rounded-lg px-3 py-1.5 w-64 border border-transparent focus-within:bg-white focus-within:border-neutral-300 transition">
+                    <input 
+                      placeholder="Search Projects"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-transparent text-xs text-neutral-900 outline-none placeholder:text-neutral-400"
+                    />
+                    <Search className="h-3.5 w-3.5 text-neutral-400 ml-2 shrink-0" />
+                  </div>
+                  <button className="h-8 w-8 rounded-lg bg-[#F3F4F6] hover:bg-neutral-200 flex items-center justify-center text-neutral-600 transition border-0">
+                    <Filter className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-                <button className="h-10 w-10 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-600 hover:bg-neutral-50 transition shadow-sm">
-                  <Filter className="h-4 w-4" />
+                
+                <button 
+                  onClick={() => setShowNewProjectModal(true)}
+                  className="bg-[#EA1B53] text-white font-semibold text-xs rounded-lg px-3.5 py-1.5 flex items-center justify-center gap-1 hover:bg-[#D01648] transition shadow-sm border-0 cursor-pointer h-8"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  <span>New Project</span>
                 </button>
               </div>
-              
-              <button 
-                onClick={() => setShowNewProjectModal(true)}
-                className="bg-[#EA1B53] text-white font-semibold text-sm rounded-xl px-5 py-2.5 flex items-center justify-center gap-2 hover:bg-[#D01648] transition shadow-md cursor-pointer"
-              >
-                <Plus className="h-4 w-4" />
-                <span>New Project</span>
-              </button>
-            </div>
 
-            {/* Table */}
-            <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-500 font-semibold text-[11px] uppercase tracking-wider select-none">
-                      <th className="py-4 px-6">Name</th>
-                      <th className="py-4 px-4">Project Number</th>
-                      <th className="py-4 px-4">Address</th>
-                      <th className="py-4 px-4">City</th>
-                      <th className="py-4 px-4">State</th>
-                      <th className="py-4 px-4">Zip</th>
-                      <th className="py-4 px-4">Phone</th>
-                      <th className="py-4 px-4">Status</th>
-                      <th className="py-4 px-4">Stage</th>
-                      <th className="py-4 px-6 text-right"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100 text-sm">
-                    {filteredProjects.length === 0 ? (
-                      <tr>
-                        <td colSpan={10} className="py-12 text-center text-neutral-400 font-medium bg-neutral-50/50">
-                          No projects found matching your search.
-                        </td>
+              {/* Table */}
+              <div className="border border-neutral-200 rounded-lg overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-[#F3F4F6] text-neutral-500 font-bold text-[10px] uppercase tracking-wider select-none">
+                        <th className="py-2.5 px-3 border border-neutral-200 w-12"></th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Name</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Project Number</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Address</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">City</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">State</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Zip</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Phone</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Status</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 whitespace-nowrap">Stage</th>
+                        <th className="py-2.5 px-3 border border-neutral-200 w-40"></th>
                       </tr>
-                    ) : (
-                      filteredProjects.map((p) => (
-                        <tr key={p.id} className="hover:bg-neutral-50/40 transition">
-                          <td className="py-4 px-6 font-medium text-neutral-900">
-                            <div className="flex items-center gap-3">
+                    </thead>
+                    <tbody className="divide-y divide-neutral-100 text-xs">
+                      {filteredProjects.length === 0 ? (
+                        <tr>
+                          <td colSpan={11} className="py-8 text-center text-neutral-400 font-medium bg-neutral-50/50 border border-neutral-200">
+                            No projects found matching your search.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredProjects.map((p) => (
+                          <tr key={p.id} className="hover:bg-neutral-50/40 transition">
+                            <td className="py-2 px-3 border border-neutral-200 text-center">
                               <div 
-                                className="h-10 w-10 rounded-xl bg-cover bg-center border border-neutral-200 shrink-0 shadow-sm"
+                                className="h-8 w-8 rounded bg-cover bg-center border border-neutral-200 mx-auto shadow-sm"
                                 style={{ backgroundImage: `url(${p.image})` }}
                               />
+                            </td>
+                            <td className="py-2 px-3 font-semibold text-neutral-900 border border-neutral-200">
                               <button 
                                 onClick={() => setActiveProject(p)}
-                                className="text-[#EA1B53] font-bold text-left hover:underline transition cursor-pointer"
+                                className="text-[#EA1B53] font-semibold text-left hover:underline transition cursor-pointer border-0 bg-transparent p-0"
                               >
                                 {p.name}
                               </button>
-                            </div>
-                          </td>
-                          <td className="py-4 px-4 text-neutral-600 font-mono text-xs">{p.number}</td>
-                          <td className="py-4 px-4 text-neutral-600">{p.address}</td>
-                          <td className="py-4 px-4 text-neutral-600">{p.city}</td>
-                          <td className="py-4 px-4 text-neutral-600">{p.state}</td>
-                          <td className="py-4 px-4 text-neutral-600 font-mono text-xs">{p.zip}</td>
-                          <td className="py-4 px-4 text-neutral-600 font-mono text-xs">{p.phone}</td>
-                          <td className="py-4 px-4">
-                            <div className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold text-xs">
-                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                              <span>{p.status}*</span>
-                            </div>
-                          </td>
-                          <td className="py-4 px-4 text-neutral-600">{p.stage}</td>
-                          <td className="py-4 px-6 text-right">
-                            <button 
-                              onClick={() => setActiveProject(p)}
-                              className="text-[#EA1B53] font-bold text-xs hover:underline flex items-center gap-1 ml-auto transition cursor-pointer"
-                            >
-                              <span>Go to Workspace</span>
-                              <span>&gt;</span>
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+                            </td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200 font-normal">{p.number}</td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200">{p.address}</td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200">{p.city}</td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200">{p.state}</td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200 font-normal">{p.zip}</td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200 font-normal">{p.phone}</td>
+                            <td className="py-2 px-3 border border-neutral-200">
+                              <span className="text-emerald-600 font-semibold">{p.status}*</span>
+                            </td>
+                            <td className="py-2 px-3 text-neutral-600 border border-neutral-200">{p.stage}</td>
+                            <td className="py-2 px-3 text-right border border-neutral-200">
+                              <button 
+                                onClick={() => setActiveProject(p)}
+                                className="text-[#EA1B53] font-semibold hover:underline inline-flex items-center gap-0.5 ml-auto transition cursor-pointer border-0 bg-transparent p-0 whitespace-nowrap"
+                              >
+                                <span>Go to Workspace &gt;</span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -465,10 +462,10 @@ function Dashboard() {
                 
                 {/* User Avatar */}
                 <div className="flex items-center gap-3 rounded-full border border-border bg-secondary px-4 py-2 select-none">
-                  <div className="h-10 w-10 rounded-full bg-[url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-200" />
+                  <div className="h-10 w-10 rounded-full bg-[url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-200" />
                   <div className="hidden items-center gap-1 sm:flex">
-                    <span className="text-sm font-semibold">Musiq</span>
-                    <span className="text-xs text-muted-foreground">@musiq</span>
+                    <span className="text-sm font-semibold">Musfiq</span>
+                    <span className="text-xs text-muted-foreground">@musfiq</span>
                   </div>
                 </div>
               </div>
