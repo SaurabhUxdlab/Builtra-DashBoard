@@ -6,10 +6,12 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { Sidebar } from "../components/Sidebar";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -115,11 +117,34 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
+
+  const persistentSidebarRoutes = [
+    "/punch-list",
+    "/daily-log",
+    "/observations",
+    "/drawing",
+    "/action-plans",
+    "/announcements",
+    "/commitments",
+    "/coordination-Issues",
+    "/correspondence",
+    "/crews",
+    "/directory",
+    "/schedule",
+  ];
+
+  const showSidebar = persistentSidebarRoutes.includes(pathname);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className={showSidebar ? "min-h-screen lg:flex" : "min-h-screen"}>
+        {showSidebar && <Sidebar />}
+        <main className={showSidebar ? "min-h-screen flex-1" : "min-h-screen"}>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </main>
+      </div>
     </QueryClientProvider>
   );
 }
