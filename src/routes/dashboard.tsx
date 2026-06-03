@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
@@ -84,6 +84,9 @@ function Dashboard() {
             </div>
           </div>
         </header>
+         <div className="flex-1 overflow-auto p-6">
+            <Outlet />
+        </div>
       </main>
     </motion.div>
   );

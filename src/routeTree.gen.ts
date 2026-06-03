@@ -25,6 +25,7 @@ import { Route as CommitmentsRouteImport } from './routes/commitments'
 import { Route as AnnouncementsRouteImport } from './routes/announcements'
 import { Route as ActionPlansRouteImport } from './routes/action-plans'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardOverviewRouteImport } from './routes/dashboard.overview'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -106,6 +107,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
+  id: '/overview',
+  path: '/overview',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -116,7 +122,7 @@ export interface FileRoutesByFullPath {
   '/correspondence': typeof CorrespondenceRoute
   '/crews': typeof CrewsRoute
   '/daily-log': typeof DailyLogRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/directory': typeof DirectoryRoute
   '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,7 +141,7 @@ export interface FileRoutesByTo {
   '/correspondence': typeof CorrespondenceRoute
   '/crews': typeof CrewsRoute
   '/daily-log': typeof DailyLogRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/directory': typeof DirectoryRoute
   '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,7 +161,7 @@ export interface FileRoutesById {
   '/correspondence': typeof CorrespondenceRoute
   '/crews': typeof CrewsRoute
   '/daily-log': typeof DailyLogRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/directory': typeof DirectoryRoute
   '/drawing': typeof DrawingRoute
   '/login': typeof LoginRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/overview': typeof DashboardOverviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/overview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/overview'
   id:
     | '__root__'
     | '/'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/overview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -228,7 +240,7 @@ export interface RootRouteChildren {
   CorrespondenceRoute: typeof CorrespondenceRoute
   CrewsRoute: typeof CrewsRoute
   DailyLogRoute: typeof DailyLogRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   DirectoryRoute: typeof DirectoryRoute
   DrawingRoute: typeof DrawingRoute
   LoginRoute: typeof LoginRoute
@@ -352,8 +364,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/overview': {
+      id: '/dashboard/overview'
+      path: '/overview'
+      fullPath: '/dashboard/overview'
+      preLoaderRoute: typeof DashboardOverviewRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
+
+interface DashboardRouteChildren {
+  DashboardOverviewRoute: typeof DashboardOverviewRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardOverviewRoute: DashboardOverviewRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -364,7 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   CorrespondenceRoute: CorrespondenceRoute,
   CrewsRoute: CrewsRoute,
   DailyLogRoute: DailyLogRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   DirectoryRoute: DirectoryRoute,
   DrawingRoute: DrawingRoute,
   LoginRoute: LoginRoute,
