@@ -1,4 +1,4 @@
-﻿import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import {
   Home, Users, FolderOpen, Image as ImageIcon, MessageSquare,
@@ -11,6 +11,7 @@ type SidebarProps = {
   open?: boolean;
   onClose?: () => void;
   collapsed?: boolean;
+  projectName?: string;
 };
 
 const overview = [
@@ -35,7 +36,7 @@ const tools = [
   { title: "Schedule", icon: Calendar },
 ];
 
-export function Sidebar({ open = false, onClose, collapsed = false }: SidebarProps) {
+export function Sidebar({ open = false, onClose, collapsed = false, projectName }: SidebarProps) {
   const path = useRouterState({ select: (r) => r.location.pathname });
 
   return (
@@ -47,7 +48,7 @@ export function Sidebar({ open = false, onClose, collapsed = false }: SidebarPro
         </div>
         <div className="px-4 py-4 border-b border-sidebar-border">
           <button className="w-full flex items-center justify-between text-left text-sm font-semibold">
-            My Workspace <ChevronDown className="h-4 w-4" />
+            {projectName || "My Workspace"} <ChevronDown className="h-4 w-4" />
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
@@ -98,7 +99,7 @@ export function Sidebar({ open = false, onClose, collapsed = false }: SidebarPro
           </div>
           <div className="px-4 py-4 border-b border-sidebar-border">
             <button className="w-full flex items-center justify-between text-left text-sm font-semibold">
-              My Workspace <ChevronDown className="h-4 w-4" />
+              {projectName || "My Workspace"} <ChevronDown className="h-4 w-4" />
             </button>
           </div>
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
