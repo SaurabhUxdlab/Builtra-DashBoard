@@ -25,7 +25,10 @@ import { Route as CommitmentsRouteImport } from './routes/commitments'
 import { Route as AnnouncementsRouteImport } from './routes/announcements'
 import { Route as ActionPlansRouteImport } from './routes/action-plans'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardTeamRouteImport } from './routes/dashboard.team'
+import { Route as DashboardPhotosRouteImport } from './routes/dashboard.photos'
 import { Route as DashboardOverviewRouteImport } from './routes/dashboard.overview'
+import { Route as DashboardDocumentsRouteImport } from './routes/dashboard.documents'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -107,9 +110,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardTeamRoute = DashboardTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPhotosRoute = DashboardPhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardOverviewRoute = DashboardOverviewRouteImport.update({
   id: '/overview',
   path: '/overview',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDocumentsRoute = DashboardDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => DashboardRoute,
 } as any)
 
@@ -130,7 +148,10 @@ export interface FileRoutesByFullPath {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/documents': typeof DashboardDocumentsRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/photos': typeof DashboardPhotosRoute
+  '/dashboard/team': typeof DashboardTeamRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,7 +170,10 @@ export interface FileRoutesByTo {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/documents': typeof DashboardDocumentsRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/photos': typeof DashboardPhotosRoute
+  '/dashboard/team': typeof DashboardTeamRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,7 +193,10 @@ export interface FileRoutesById {
   '/punch-list': typeof PunchListRoute
   '/schedule': typeof ScheduleRoute
   '/signup': typeof SignupRoute
+  '/dashboard/documents': typeof DashboardDocumentsRoute
   '/dashboard/overview': typeof DashboardOverviewRoute
+  '/dashboard/photos': typeof DashboardPhotosRoute
+  '/dashboard/team': typeof DashboardTeamRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -190,7 +217,10 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/documents'
     | '/dashboard/overview'
+    | '/dashboard/photos'
+    | '/dashboard/team'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,7 +239,10 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/documents'
     | '/dashboard/overview'
+    | '/dashboard/photos'
+    | '/dashboard/team'
   id:
     | '__root__'
     | '/'
@@ -228,7 +261,10 @@ export interface FileRouteTypes {
     | '/punch-list'
     | '/schedule'
     | '/signup'
+    | '/dashboard/documents'
     | '/dashboard/overview'
+    | '/dashboard/photos'
+    | '/dashboard/team'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -364,6 +400,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/photos': {
+      id: '/dashboard/photos'
+      path: '/photos'
+      fullPath: '/dashboard/photos'
+      preLoaderRoute: typeof DashboardPhotosRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/overview': {
       id: '/dashboard/overview'
       path: '/overview'
@@ -371,15 +421,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardOverviewRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/documents': {
+      id: '/dashboard/documents'
+      path: '/documents'
+      fullPath: '/dashboard/documents'
+      preLoaderRoute: typeof DashboardDocumentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardDocumentsRoute: typeof DashboardDocumentsRoute
   DashboardOverviewRoute: typeof DashboardOverviewRoute
+  DashboardPhotosRoute: typeof DashboardPhotosRoute
+  DashboardTeamRoute: typeof DashboardTeamRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardDocumentsRoute: DashboardDocumentsRoute,
   DashboardOverviewRoute: DashboardOverviewRoute,
+  DashboardPhotosRoute: DashboardPhotosRoute,
+  DashboardTeamRoute: DashboardTeamRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

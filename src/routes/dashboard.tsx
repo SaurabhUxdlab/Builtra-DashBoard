@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/Sidebar";
@@ -48,6 +48,10 @@ const DEFAULT_PROJECTS: Project[] = [
 ];
 
 function Dashboard() {
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const isDashboardRoute = path === "/dashboard";
+  const isDashboardChildRoute = path.startsWith("/dashboard/") && path !== "/dashboard";
+
   const [shouldAnimateBlur] = useState(() => {
     if (typeof window !== "undefined") {
       const loggedIn = sessionStorage.getItem("just_logged_in");
@@ -158,7 +162,82 @@ function Dashboard() {
       className="h-screen overflow-hidden flex flex-col bg-neutral-50 text-foreground w-full relative"
     >
       {/* Dynamic View rendering */}
-      {!activeProject ? (
+      {isDashboardChildRoute ? (
+        <div className="h-screen overflow-hidden flex w-full">
+          <Sidebar
+            open={sidebarOpen}
+            collapsed={sidebarCollapsed}
+            onClose={() => setSidebarOpen(false)}
+            projectName={activeProject?.name ?? projects[0]?.name ?? "My Workspace"}
+          />
+
+          <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <header className="flex items-center justify-between gap-4 px-6 py-4 border-b border-border bg-card shrink-0">
+              <div className="flex items-center gap-4">
+                <button
+                  className="p-2 rounded-xl hover:bg-secondary transition cursor-pointer text-neutral-500 hover:text-neutral-900"
+                  onClick={() => {
+                    if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
+                      setSidebarCollapsed((s) => !s);
+                    } else {
+                      setSidebarOpen(true);
+                    }
+                  }}
+                >
+                  <SidebarIcon className="h-5 w-5 text-primary" />
+                </button>
+                <div className="flex items-center gap-3 rounded-2xl border border-border bg-secondary px-3 py-2">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#EA1B53] text-sm font-semibold text-white">
+                    <span className="text-xs">{(activeProject ?? projects[0])?.name?.charAt(0) ?? "B"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="h-10 w-10 rounded-2xl bg-cover bg-center border border-border"
+                      style={{ backgroundImage: `url(${(activeProject ?? projects[0])?.image})` }}
+                    />
+                    <div className="min-w-0 text-left">
+                      <div className="text-sm font-semibold truncate">{activeProject?.name ?? projects[0]?.name ?? "My Workspace"}</div>
+                      <div className="text-xs text-muted-foreground">{activeProject?.stage ?? projects[0]?.stage ?? "Bidding"}</div>
+                    </div>
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </div>
+              </div>
+
+              <div className="flex-1 max-w-2xl">
+                <div className="flex items-center rounded-2xl border border-border bg-secondary px-4 py-2">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <input
+                    placeholder="Search projects, files, people..."
+                    className="ml-3 w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button className="rounded-2xl p-2 hover:bg-secondary transition cursor-pointer text-neutral-500 hover:text-neutral-900">
+                  <Headphones className="h-5 w-5" />
+                </button>
+                <button className="relative rounded-2xl p-2 hover:bg-secondary transition cursor-pointer text-neutral-500 hover:text-neutral-900">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-[#EA1B53]" />
+                </button>
+                <div className="flex items-center gap-3 rounded-full border border-border bg-secondary px-4 py-2 select-none">
+                  <div className="h-10 w-10 rounded-full bg-[url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80')] bg-cover bg-center border border-neutral-200" />
+                  <div className="hidden items-center gap-1 sm:flex">
+                    <span className="text-sm font-semibold">Musiq</span>
+                    <span className="text-xs text-muted-foreground">@musiq</span>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            <div className="flex-1 overflow-y-auto px-6 md:px-12 py-8 flex flex-col gap-6 bg-secondary/30">
+              <Outlet />
+            </div>
+          </main>
+        </div>
+      ) : !activeProject ? (
         // PORTFOLIO VIEW (Matches screenshot exactly)
         <div className="h-screen overflow-y-auto flex flex-col w-full">
           {/* Black top header */}

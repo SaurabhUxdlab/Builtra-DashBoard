@@ -15,11 +15,11 @@ type SidebarProps = {
 };
 
 const overview = [
-  { title: "Overview", url: "/dashboard", icon: Home },
-  { title: "Team", url: "#", icon: Users },
-  { title: "Documents", url: "#", icon: FolderOpen },
-  { title: "Photos", url: "#", icon: ImageIcon },
-  { title: "Conversations", url: "#", icon: MessageSquare },
+  { title: "Overview", url: "/dashboard/overview", icon: Home },
+  { title: "Team", url: "/dashboard/team", icon: Users },
+  { title: "Documents", url: "/dashboard/documents", icon: FolderOpen },
+  { title: "Photos", url: "/dashboard/photos", icon: ImageIcon },
+  { title: "Conversations", url: "/dashboard/conversations", icon: MessageSquare },
 ];
 const tools = [
   { title: "Punch List", url: "/punch-list", icon: ClipboardList },
