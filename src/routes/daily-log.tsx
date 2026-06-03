@@ -1,201 +1,261 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useMemo, useState } from 'react';
-import { Calendar, CloudSun, FileText, MoreHorizontal, Plus, Search, Trash2, Users } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Search, Filter, Plus, Pencil, Eye, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/daily-log')({
   component: DailyLogPage,
 });
 
 function DailyLogPage() {
-  const [logs, setLogs] = useState([
-    { id: 'LOG-001', date: '2026-06-03', weather: 'Sunny', crew: 'Concrete Team', status: 'Submitted' },
-    { id: 'LOG-002', date: '2026-06-02', weather: 'Cloudy', crew: 'Steel Fixers', status: 'Draft' },
+  const [items, setItems] = useState([
+    { 
+      id: 1,
+      resource: 'AQR', 
+      scheduledTasks: 'PHASE 2 (E) Nurse Station Area Construction : PHASE 2 Air Balance Approval', 
+      startDate: '7-18-2026', 
+      finishDate: '7-24-2026',
+      workers: '4',
+      hours: '4',
+      rate: '45',
+      comments: 'No Comments'
+    }
   ]);
-  const [search, setSearch] = useState('');
-  const [isComposeOpen, setIsComposeOpen] = useState(false);
-  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-  const [newDate, setNewDate] = useState('');
-  const [newWeather, setNewWeather] = useState('');
-  const [newCrew, setNewCrew] = useState('');
-  const [newNotes, setNewNotes] = useState('');
 
-  const filteredLogs = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return logs.filter((log) =>
-      q === '' ||
-      log.date.toLowerCase().includes(q) ||
-      log.crew.toLowerCase().includes(q) ||
-      log.weather.toLowerCase().includes(q),
-    );
-  }, [logs, search]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Form States for New Member/Item
+  const [newResource, setNewResource] = useState("");
+  const [newTasks, setNewTasks] = useState("");
+  const [newStartDate, setNewStartDate] = useState("");
+  const [newFinishDate, setNewFinishDate] = useState("");
+  const [newWorkers, setNewWorkers] = useState("");
+  const [newHours, setNewHours] = useState("");
+  const [newRate, setNewRate] = useState("");
+  const [newComments, setNewComments] = useState("");
 
-  const createLog = () => {
-    if (!newDate || !newCrew.trim()) return;
+  const filteredItems = items.filter(item => 
+    item.resource.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    item.scheduledTasks.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    setLogs((prev) => [
-      {
-        id: `LOG-${String(prev.length + 1).padStart(3, '0')}`,
-        date: newDate,
-        weather: newWeather.trim() || 'Clear',
-        crew: newCrew.trim(),
-        status: 'Draft',
-      },
-      ...prev,
-    ]);
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newResource.trim() || !newTasks.trim()) {
+      toast.error("Please fill required fields");
+      return;
+    }
 
-    setNewDate('');
-    setNewWeather('');
-    setNewCrew('');
-    setNewNotes('');
-    setIsComposeOpen(false);
-  };
+    const newItem = {
+      id: Date.now(),
+      resource: newResource,
+      scheduledTasks: newTasks,
+      startDate: newStartDate || "-",
+      finishDate: newFinishDate || "-",
+      workers: newWorkers || "0",
+      hours: newHours || "0",
+      rate: newRate || "0",
+      comments: newComments || "No Comments"
+    };
 
-  const handleDelete = (id: string) => {
-    setLogs((prev) => prev.filter((log) => log.id !== id));
-    setActiveMenuId(null);
-  };
-
-  const markSubmitted = (id: string) => {
-    setLogs((prev) =>
-      prev.map((log) => (log.id === id ? { ...log, status: 'Submitted' } : log)),
-    );
-    setActiveMenuId(null);
+    setItems([newItem, ...items]);
+    setIsModalOpen(false);
+    
+    // reset form
+    setNewResource("");
+    setNewTasks("");
+    setNewStartDate("");
+    setNewFinishDate("");
+    setNewWorkers("");
+    setNewHours("");
+    setNewRate("");
+    setNewComments("");
+    
+    toast.success("New entry added successfully!");
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/70 p-8" onClick={() => setActiveMenuId(null)}>
-      <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Field Reporting</p>
-        <h1 className="text-3xl font-bold text-slate-900">Daily Logs</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">Capture daily site progress, weather, crew activity, and report status from one professional workspace.</p>
-      </div>
+    <div className="p-8 bg-white min-h-screen relative">
+      <div className="mb-2 text-sm text-gray-500 font-medium">Dashboard &gt; Documents</div>
+      <h1 className="text-3xl font-bold mb-8 text-black">Daily Log</h1>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-4">
-        <Card className="border-slate-200 shadow-none">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-slate-500">Total Logs</p>
-              <p className="mt-2 text-2xl font-bold text-slate-900">{logs.length}</p>
-            </div>
-            <FileText className="h-5 w-5 text-slate-400" />
-          </CardContent>
-        </Card>
-        <Card className="border-emerald-200 bg-emerald-50/40 shadow-none">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-emerald-700">Submitted</p>
-              <p className="mt-2 text-2xl font-bold text-emerald-900">{logs.filter((log) => log.status === 'Submitted').length}</p>
-            </div>
-            <Calendar className="h-5 w-5 text-emerald-600" />
-          </CardContent>
-        </Card>
-        <Card className="border-amber-200 bg-amber-50/40 shadow-none">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-amber-700">Drafts</p>
-              <p className="mt-2 text-2xl font-bold text-amber-900">{logs.filter((log) => log.status === 'Draft').length}</p>
-            </div>
-            <CloudSun className="h-5 w-5 text-amber-600" />
-          </CardContent>
-        </Card>
-        <Card className="border-sky-200 bg-sky-50/40 shadow-none">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-sky-700">Crews</p>
-              <p className="mt-2 text-2xl font-bold text-sky-900">{new Set(logs.map((log) => log.crew)).size}</p>
-            </div>
-            <Users className="h-5 w-5 text-sky-600" />
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative w-full lg:w-96">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-          <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search by date, weather, or crew..."
-            className="border-slate-200 bg-white pl-10"
-          />
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-2 w-full max-w-[400px]">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+            <Input
+              placeholder="Search members..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-gray-100/80 border-none focus-visible:ring-0 text-gray-700 placeholder:text-gray-400"
+            />
+          </div>
+          <Button variant="outline" size="icon" onClick={() => toast("Advanced filters opened")} className="bg-gray-100/80 border-none text-gray-500 hover:bg-gray-200/80">
+            <Filter className="h-4 w-4" />
+          </Button>
         </div>
 
-        <Dialog open={isComposeOpen} onOpenChange={setIsComposeOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2 bg-[#E11D48] hover:bg-[#BE123C]">
-              <Plus className="h-4 w-4" /> Create Daily Log
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>New Daily Log</DialogTitle>
-              <DialogDescription>Record the day’s work, weather, and crew details.</DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-3 pt-4">
-              <Input type="date" value={newDate} onChange={(event) => setNewDate(event.target.value)} />
-              <Input value={newWeather} onChange={(event) => setNewWeather(event.target.value)} placeholder="Weather conditions" />
-              <Input value={newCrew} onChange={(event) => setNewCrew(event.target.value)} placeholder="Crew name" />
-              <textarea value={newNotes} onChange={(event) => setNewNotes(event.target.value)} className="min-h-[100px] w-full rounded-md border border-slate-200 p-2 text-sm" placeholder="Work performed today..." />
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsComposeOpen(false)}>Cancel</Button>
-              <Button onClick={createLog}>Save Log</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => setIsModalOpen(true)} className="bg-[#E11D48] hover:bg-[#BE123C] text-white px-6 font-semibold shadow-sm">
+          <Plus className="h-4 w-4 mr-2" /> New Member
+        </Button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+      <div className="border border-gray-100 rounded-sm">
         <Table>
-          <TableHeader className="bg-slate-50/70">
-            <TableRow>
-              <TableHead className="text-xs font-semibold uppercase">Log ID</TableHead>
-              <TableHead className="text-xs font-semibold uppercase">Date</TableHead>
-              <TableHead className="text-xs font-semibold uppercase">Weather</TableHead>
-              <TableHead className="text-xs font-semibold uppercase">Crew</TableHead>
-              <TableHead className="text-xs font-semibold uppercase">Status</TableHead>
-              <TableHead className="text-xs font-semibold uppercase text-right">Actions</TableHead>
+          <TableHeader className="bg-gray-50/50">
+            <TableRow className="border-b border-gray-100">
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">RESOURCE</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider w-[25%]">SCHEDULED TASKS</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">START DATE</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">FINISH DATE</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">WORKERS</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">HOURS</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">RATE (USD)</TableHead>
+              <TableHead className="border-r border-gray-100 text-[10px] font-bold uppercase text-gray-500 py-4 tracking-wider">COMMENTS</TableHead>
+              <TableHead className="w-[80px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredLogs.map((log) => (
-              <TableRow key={log.id} className="hover:bg-slate-50">
-                <TableCell className="font-mono text-xs text-slate-500">{log.id}</TableCell>
-                <TableCell className="font-semibold text-slate-900">{log.date}</TableCell>
-                <TableCell className="text-sm text-slate-600">{log.weather}</TableCell>
-                <TableCell className="text-sm text-slate-600">{log.crew}</TableCell>
-                <TableCell>
-                  <Badge variant={log.status === 'Submitted' ? 'default' : 'secondary'}>{log.status}</Badge>
-                </TableCell>
-                <TableCell className="relative text-right">
-                  <Button variant="ghost" size="icon" onClick={(event) => { event.stopPropagation(); setActiveMenuId(activeMenuId === log.id ? null : log.id); }}>
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                  {activeMenuId === log.id && (
-                    <div className="absolute right-0 z-10 mt-2 w-40 rounded-md border border-slate-200 bg-white shadow-lg">
-                      <button onClick={() => markSubmitted(log.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">Mark Submitted</button>
-                      <button onClick={() => handleDelete(log.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50">
-                        <Trash2 className="h-3 w-3" /> Delete
-                      </button>
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => (
+                <TableRow key={item.id} className="border-b border-gray-100 hover:bg-gray-50/30">
+                  <TableCell className="border-r border-gray-100 py-4 font-semibold text-[12px] text-gray-700">{item.resource}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-medium text-rose-500">{item.scheduledTasks}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-bold text-gray-700">{item.startDate}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-bold text-gray-700">{item.finishDate}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-bold text-gray-700">{item.workers}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-bold text-gray-700">{item.hours}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] font-bold text-gray-700">{item.rate}</TableCell>
+                  <TableCell className="border-r border-gray-100 py-4 text-[12px] text-gray-500">{item.comments}</TableCell>
+                  <TableCell className="py-4 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <Button variant="ghost" size="icon" onClick={() => toast("Editing record...")} className="h-6 w-6 text-blue-500 hover:bg-blue-50">
+                        <Pencil className="h-3 w-3" fill="currentColor" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => toast("Viewing record details...")} className="h-6 w-6 text-gray-500 hover:bg-gray-100">
+                        <Eye className="h-3 w-3" fill="currentColor" />
+                      </Button>
                     </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-            {filteredLogs.length === 0 && (
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
-                <TableCell colSpan={6} className="py-10 text-center text-sm text-slate-500">No daily logs match your current search.</TableCell>
+                <TableCell colSpan={9} className="py-8 text-center text-sm text-gray-500">
+                  No records match "{searchQuery}"
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
+      {/* MODAL */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-white rounded-xl shadow-xl border w-full max-w-2xl p-6 relative">
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+              <X className="h-4 w-4" />
+            </button>
+            
+            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">Add New Record</h2>
+            
+            <form onSubmit={handleAdd} className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Scheduled Tasks *</label>
+                <Input 
+                  type="text" 
+                  required
+                  placeholder="e.g., PHASE 2 Air Balance Approval" 
+                  value={newTasks}
+                  onChange={(e) => setNewTasks(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Resource *</label>
+                <Input 
+                  type="text" 
+                  required
+                  placeholder="e.g., AQR" 
+                  value={newResource}
+                  onChange={(e) => setNewResource(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Comments</label>
+                <Input 
+                  type="text" 
+                  placeholder="e.g., No Comments" 
+                  value={newComments}
+                  onChange={(e) => setNewComments(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Start Date</label>
+                <Input 
+                  type="text" 
+                  placeholder="e.g., 7-18-2026" 
+                  value={newStartDate}
+                  onChange={(e) => setNewStartDate(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Finish Date</label>
+                <Input 
+                  type="text" 
+                  placeholder="e.g., 7-24-2026" 
+                  value={newFinishDate}
+                  onChange={(e) => setNewFinishDate(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Workers</label>
+                <Input 
+                  type="number" 
+                  placeholder="e.g., 4" 
+                  value={newWorkers}
+                  onChange={(e) => setNewWorkers(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Hours</label>
+                <Input 
+                  type="number" 
+                  placeholder="e.g., 4" 
+                  value={newHours}
+                  onChange={(e) => setNewHours(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Rate (USD)</label>
+                <Input 
+                  type="number" 
+                  placeholder="e.g., 45" 
+                  value={newRate}
+                  onChange={(e) => setNewRate(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              
+              <div className="col-span-2 flex justify-end gap-2 pt-4">
+                <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="text-slate-500">Cancel</Button>
+                <Button type="submit" className="bg-[#E11D48] hover:bg-[#BE123C] text-white font-semibold">Create Record</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

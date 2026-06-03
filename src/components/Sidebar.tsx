@@ -1,4 +1,4 @@
-﻿import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import {
   Home, Users, FolderOpen, Image as ImageIcon, MessageSquare,
@@ -14,25 +14,25 @@ type SidebarProps = {
 };
 
 const overview = [
-  { title: "Overview", url: "/overview", icon: Home },
+  { title: "Overview", url: "/dashboard", icon: Home },
   { title: "Team", url: "#", icon: Users },
   { title: "Documents", url: "#", icon: FolderOpen },
   { title: "Photos", url: "#", icon: ImageIcon },
   { title: "Conversations", url: "#", icon: MessageSquare },
 ];
 const tools = [
-  { title: "Punch List", icon: ClipboardList },
-  { title: "Daily Log", icon: FileText },
-  { title: "Observations", icon: Search },
-  { title: "Drawing", icon: Pencil },
-  { title: "Action Plans", icon: ListChecks },
-  { title: "Announcements", icon: Megaphone },
-  { title: "Commitments", icon: Handshake },
-  { title: "Coordination Issues", icon: AlertTriangle },
-  { title: "Correspondence", icon: Mail },
-  { title: "Crews", icon: HardHat },
-  { title: "Directory", icon: BookUser },
-  { title: "Schedule", icon: Calendar },
+  { title: "Punch List", url: "/punch-list", icon: ClipboardList },
+  { title: "Daily Log", url: "/daily-log", icon: FileText },
+  { title: "Observations", url: "/observations", icon: Search },
+  { title: "Drawing", url: "/drawing", icon: Pencil },
+  { title: "Action Plans", url: "/action-plans", icon: ListChecks },
+  { title: "Announcements", url: "/announcements", icon: Megaphone },
+  { title: "Commitments", url: "/commitments", icon: Handshake },
+  { title: "Coordination Issues", url: "/coordination-Issues", icon: AlertTriangle },
+  { title: "Correspondence", url: "/correspondence", icon: Mail },
+  { title: "Crews", url: "/crews", icon: HardHat },
+  { title: "Directory", url: "/directory", icon: BookUser },
+  { title: "Schedule", url: "/schedule", icon: Calendar },
 ];
 
 export function Sidebar({ open = false, onClose, collapsed = false }: SidebarProps) {
@@ -74,13 +74,16 @@ export function Sidebar({ open = false, onClose, collapsed = false }: SidebarPro
               <Edit3 className="h-3.5 w-3.5" />
             </div>
             <ul className="space-y-1">
-              {tools.map((item, i) => (
-                <motion.li key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
-                  <span className="flex items-center gap-3 rounded-md px-3 py-1 text-sm hover:bg-sidebar-accent/60 cursor-pointer">
-                    <item.icon className="h-4 w-4" /> {item.title}
-                  </span>
-                </motion.li>
-              ))}
+              {tools.map((item, i) => {
+                const active = path === item.url;
+                return (
+                  <motion.li key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
+                    <Link to={item.url as any} className={`flex items-center gap-3 rounded-md px-3 py-1 text-sm transition-colors ${active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/60"}`}>
+                      <item.icon className="h-4 w-4" /> {item.title}
+                    </Link>
+                  </motion.li>
+                );
+              })}
             </ul>
           </div>
         </nav>
@@ -125,13 +128,16 @@ export function Sidebar({ open = false, onClose, collapsed = false }: SidebarPro
                 <Edit3 className="h-3.5 w-3.5" />
               </div>
               <ul className="space-y-1">
-                {tools.map((item, i) => (
-                  <motion.li key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
-                    <span className="flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-sidebar-accent/60 cursor-pointer">
-                      <item.icon className="h-4 w-4" /> {item.title}
-                    </span>
-                  </motion.li>
-                ))}
+                {tools.map((item, i) => {
+                  const active = path === item.url;
+                  return (
+                    <motion.li key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}>
+                      <Link to={item.url as any} onClick={onClose} className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${active ? "bg-sidebar-accent text-sidebar-accent-foreground" : "hover:bg-sidebar-accent/60"}`}>
+                        <item.icon className="h-4 w-4" /> {item.title}
+                      </Link>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </div>
           </nav>

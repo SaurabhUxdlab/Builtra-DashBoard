@@ -1,12 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useMemo, useState } from 'react';
-import { AlertCircle, CheckCircle2, FileText, MoreHorizontal, Plus, Search, Trash2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Search, Filter, Plus, Download, Eye, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/punch-list')({
   component: PunchListPage,
@@ -14,184 +12,230 @@ export const Route = createFileRoute('/punch-list')({
 
 function PunchListPage() {
   const [items, setItems] = useState([
-    { id: 'PUN-001', task: 'Touch-up paint on Level 3 ceiling', status: 'Open', priority: 'High' },
-    { id: 'PUN-002', task: 'Fix loose door handle in Lobby', status: 'Completed', priority: 'Low' },
+    { 
+      task: 'Concrete Imperfection', 
+      assignee: 'Mateo Lopez', 
+      dueDate: 'May 12, 2026', 
+      status: 'Work Required', 
+      statusColor: 'bg-red-600 text-white' 
+    },
+    { 
+      task: 'Non-functioning Emergency Exit Signs', 
+      assignee: 'Jim Taylor', 
+      dueDate: 'May 10, 2026', 
+      status: 'Initiated', 
+      statusColor: 'bg-blue-500 text-white' 
+    },
+    { 
+      task: 'Exposed Wiring in Shared Office', 
+      assignee: 'Josh Grey', 
+      dueDate: 'May 9, 2026', 
+      status: 'Closed', 
+      statusColor: 'bg-gray-500 text-white' 
+    },
   ]);
-  const [search, setSearch] = useState('');
-  const [isComposeOpen, setIsComposeOpen] = useState(false);
-  const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
-  const [newTask, setNewTask] = useState('');
-  const [newPriority, setNewPriority] = useState<'High' | 'Medium' | 'Low'>('Medium');
 
-  const filteredItems = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return items.filter((item) =>
-      q === '' ||
-      item.task.toLowerCase().includes(q) ||
-      item.status.toLowerCase().includes(q) ||
-      item.priority.toLowerCase().includes(q),
-    );
-  }, [items, search]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Form States for New Item
+  const [newTask, setNewTask] = useState("");
+  const [newAssignee, setNewAssignee] = useState("");
+  const [newDueDate, setNewDueDate] = useState("");
+  const [newStatus, setNewStatus] = useState("Work Required");
 
-  const createItem = () => {
-    if (!newTask.trim()) return;
+  // Dynamic Search Filter
+  const filteredItems = items.filter(item => 
+    item.task.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    item.assignee.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-    setItems((prev) => [
-      {
-        id: `PUN-${String(prev.length + 1).padStart(3, '0')}`,
-        task: newTask.trim(),
-        status: 'Open',
-        priority: newPriority,
-      },
-      ...prev,
-    ]);
-
-    setNewTask('');
-    setNewPriority('Medium');
-    setIsComposeOpen(false);
+  // Download functionality
+  const handleDownloadCSV = () => {
+    if (items.length === 0) {
+      toast.error("No data to download");
+      return;
+    }
+    const csvContent = "data:text/csv;charset=utf-8," 
+        + "TASK,ASSIGNEE,DUE DATE,STATUS\n"
+        + items.map(e => `"${e.task}","${e.assignee}","${e.dueDate}","${e.status}"`).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "punch_list.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Download started!");
   };
 
-  const toggleStatus = (id: string) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: item.status === 'Open' ? 'Completed' : 'Open' } : item,
-      ),
-    );
-    setActiveMenuId(null);
-  };
+  // Add Item Logic
+  const handleAddPunch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTask.trim() || !newAssignee.trim() || !newDueDate.trim()) {
+      toast.error("Please fill all required fields");
+      return;
+    }
 
-  const handleDelete = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-    setActiveMenuId(null);
-  };
+    let color = 'bg-gray-500 text-white';
+    if(newStatus === 'Work Required') color = 'bg-red-600 text-white';
+    if(newStatus === 'Initiated') color = 'bg-blue-500 text-white';
 
-  const priorityVariant = (priority: string) => {
-    if (priority === 'High') return 'destructive';
-    if (priority === 'Medium') return 'secondary';
-    return 'outline';
+    const newItem = {
+      task: newTask,
+      assignee: newAssignee,
+      dueDate: newDueDate,
+      status: newStatus,
+      statusColor: color
+    };
+
+    setItems([newItem, ...items]);
+    setIsModalOpen(false);
+    setNewTask("");
+    setNewAssignee("");
+    setNewDueDate("");
+    setNewStatus("Work Required");
+    toast.success("New punch item added!");
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/70 p-8" onClick={() => setActiveMenuId(null)}>
-      <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Construction Closeout</p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-900">Punch List</h1>
-        <p className="mt-2 max-w-3xl text-sm text-slate-600">Manage final-site defects, prioritize critical fixes, and track closeout progress with a professional field operations workflow.</p>
-      </div>
+    <div className="p-8 bg-white min-h-screen relative">
+      <div className="mb-2 text-sm text-gray-500 font-medium">Dashboard &gt; Punch List</div>
+      <h1 className="text-3xl font-bold mb-8 text-black">Punch List</h1>
 
-      <div className="mb-8 grid gap-4 md:grid-cols-3">
-        <Card className="border-slate-200 bg-white shadow-sm">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-slate-500">Open Items</p>
-              <p className="mt-2 text-2xl font-bold text-slate-900">{items.filter((item) => item.status === 'Open').length}</p>
-            </div>
-            <AlertCircle className="h-5 w-5 text-slate-400" />
-          </CardContent>
-        </Card>
-        <Card className="border-emerald-200 bg-emerald-50/60 shadow-sm">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-emerald-700">Completed</p>
-              <p className="mt-2 text-2xl font-bold text-emerald-900">{items.filter((item) => item.status === 'Completed').length}</p>
-            </div>
-            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-          </CardContent>
-        </Card>
-        <Card className="border-rose-200 bg-rose-50/60 shadow-sm">
-          <CardContent className="flex items-start justify-between gap-3 p-4">
-            <div>
-              <p className="text-xs font-bold uppercase text-rose-700">High Priority</p>
-              <p className="mt-2 text-2xl font-bold text-rose-900">{items.filter((item) => item.priority === 'High').length}</p>
-            </div>
-            <AlertCircle className="h-5 w-5 text-rose-600" />
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative w-full lg:w-96">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-          <Input
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search by task, status, or priority..."
-            className="border-slate-200 bg-white pl-10"
-          />
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-2 w-full max-w-[400px]">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
+            <Input
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-gray-100/80 border-none focus-visible:ring-0 text-gray-700 placeholder:text-gray-400"
+            />
+          </div>
+          <Button variant="outline" size="icon" onClick={() => toast("Advanced filters opened")} className="bg-gray-100/80 border-none text-gray-500 hover:bg-gray-200/80">
+            <Filter className="h-4 w-4" />
+          </Button>
         </div>
 
-        <Dialog open={isComposeOpen} onOpenChange={setIsComposeOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2 bg-[#E11D48] hover:bg-[#BE123C]">
-              <Plus className="h-4 w-4" /> Add Item
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Punch List Item</DialogTitle>
-              <DialogDescription>Log a new defect, finish item, or site correction.</DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-3 pt-4">
-              <Input value={newTask} onChange={(event) => setNewTask(event.target.value)} placeholder="Task description" />
-              <select value={newPriority} onChange={(event) => setNewPriority(event.target.value as 'High' | 'Medium' | 'Low')} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsComposeOpen(false)}>Cancel</Button>
-              <Button onClick={createItem}>Create</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={handleDownloadCSV} className="text-rose-600 border-rose-200 bg-white hover:bg-rose-50 hover:text-rose-700 px-6 font-semibold">
+            <Download className="h-4 w-4 mr-2" /> Download List
+          </Button>
+          <Button onClick={() => setIsModalOpen(true)} className="bg-[#E11D48] hover:bg-[#BE123C] text-white px-6 font-semibold shadow-sm">
+            <Plus className="h-4 w-4 mr-2" /> New Punch
+          </Button>
+        </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="border border-gray-100 rounded-sm">
         <Table>
-          <TableHeader className="bg-slate-50/70">
-            <TableRow>
-              <TableHead className="text-xs font-semibold uppercase tracking-[0.18em]">ID</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-[0.18em]">Task</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-[0.18em]">Status</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-[0.18em]">Priority</TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-[0.18em] text-right">Actions</TableHead>
+          <TableHeader className="bg-gray-50/50">
+            <TableRow className="border-b border-gray-100">
+              <TableHead className="text-[11px] font-bold uppercase text-gray-500 py-4 tracking-wider w-[40%]">TASK</TableHead>
+              <TableHead className="text-[11px] font-bold uppercase text-gray-500 py-4 tracking-wider">ASSIGNEE</TableHead>
+              <TableHead className="text-[11px] font-bold uppercase text-gray-500 py-4 tracking-wider">DUE DATE</TableHead>
+              <TableHead className="text-[11px] font-bold uppercase text-gray-500 py-4 tracking-wider">STATUS</TableHead>
+              <TableHead className="w-[50px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredItems.map((item) => (
-              <TableRow key={item.id} className="hover:bg-slate-50">
-                <TableCell className="font-mono text-xs text-slate-500">{item.id}</TableCell>
-                <TableCell className="font-semibold text-slate-900">{item.task}</TableCell>
-                <TableCell>
-                  <Badge variant={item.status === 'Open' ? 'destructive' : 'default'}>{item.status}</Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge variant={priorityVariant(item.priority)} className="capitalize">{item.priority}</Badge>
-                </TableCell>
-                <TableCell className="relative text-right">
-                  <Button variant="ghost" size="icon" onClick={(event) => { event.stopPropagation(); setActiveMenuId(activeMenuId === item.id ? null : item.id); }}>
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                  {activeMenuId === item.id && (
-                    <div className="absolute right-0 z-10 mt-2 w-40 rounded-md border border-slate-200 bg-white shadow-lg">
-                      <button onClick={() => toggleStatus(item.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">Toggle Status</button>
-                      <button onClick={() => handleDelete(item.id)} className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50">
-                        <Trash2 className="h-3 w-3" /> Delete
-                      </button>
-                    </div>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-            {filteredItems.length === 0 && (
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item, index) => (
+                <TableRow key={index} className="border-b border-gray-100 hover:bg-gray-50/30">
+                  <TableCell className="py-4 font-semibold text-[13px] text-gray-900">{item.task}</TableCell>
+                  <TableCell className="py-4 text-[13px] font-medium text-gray-600">{item.assignee}</TableCell>
+                  <TableCell className="py-4 text-[13px] font-medium text-gray-600">{item.dueDate}</TableCell>
+                  <TableCell className="py-4">
+                    <span className={`px-3 py-1 text-[11px] font-bold rounded-full ${item.statusColor}`}>
+                      {item.status}
+                    </span>
+                  </TableCell>
+                  <TableCell className="py-4 text-right">
+                    <Button variant="outline" size="icon" onClick={() => toast(`Viewing details for: ${item.task}`)} className="h-6 w-6 text-gray-400 border-gray-200 bg-white">
+                      <Eye className="h-3 w-3" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
-                <TableCell colSpan={5} className="py-10 text-center text-sm text-slate-500">No punch list items match your current search.</TableCell>
+                <TableCell colSpan={5} className="py-8 text-center text-sm text-gray-500">
+                  No punch items match "{searchQuery}"
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
+
+      {/* NEW PUNCH MODAL */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="bg-white rounded-xl shadow-xl border w-full max-w-md p-6 relative">
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+              <X className="h-4 w-4" />
+            </button>
+            
+            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">Add New Punch Item</h2>
+            
+            <form onSubmit={handleAddPunch} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Task Description *</label>
+                <Input 
+                  type="text" 
+                  required
+                  placeholder="e.g., Fix broken window" 
+                  value={newTask}
+                  onChange={(e) => setNewTask(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Assignee *</label>
+                <Input 
+                  type="text" 
+                  required
+                  placeholder="e.g., John Doe" 
+                  value={newAssignee}
+                  onChange={(e) => setNewAssignee(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Due Date *</label>
+                <Input 
+                  type="text" 
+                  required
+                  placeholder="e.g., May 20, 2026" 
+                  value={newDueDate}
+                  onChange={(e) => setNewDueDate(e.target.value)}
+                  className="w-full bg-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Status</label>
+                <select 
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                  className="w-full h-10 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                >
+                  <option value="Work Required">Work Required</option>
+                  <option value="Initiated">Initiated</option>
+                  <option value="Closed">Closed</option>
+                </select>
+              </div>
+              
+              <div className="flex justify-end gap-2 pt-2">
+                <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="text-slate-500">Cancel</Button>
+                <Button type="submit" className="bg-[#E11D48] hover:bg-[#BE123C] text-white font-semibold">Create Item</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
