@@ -17,21 +17,22 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login - replace with actual API call and animate blur transition
+
+    // Simulate login and show blur transition before opening dashboard
     setTimeout(() => {
       if (typeof window !== "undefined") {
         sessionStorage.setItem("just_logged_in", "true");
       }
       navigate({ to: "/dashboard" });
-    }, 1500);
+    }, 1200);
   };
   
   return (
     <AuthShell title="Welcome Back" subtitle="Login to your Builtraa account." isLoading={isLoading}>
       <motion.form 
-        className="space-y-4" 
+        className="space-y-4 relative z-10"
         onSubmit={handleSubmit}
-        animate={isLoading ? { opacity: 0.5, filter: "blur(5px)" } : { opacity: 1, filter: "blur(0px)" }}
+        animate={isLoading ? { opacity: 0.45, filter: "blur(8px)" } : { opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.3 }}
       >
         <div>

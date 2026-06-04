@@ -8,11 +8,11 @@ function MockDashboard({ isLoading }: { isLoading?: boolean }) {
   return (
     <motion.div 
       animate={{
-        filter: isLoading ? "blur(0px)" : "blur(10px)",
-        scale: isLoading ? 1 : 1.05,
-        opacity: isLoading ? 1 : 0.75,
+        filter: isLoading ? "blur(18px)" : "blur(10px)",
+        scale: isLoading ? 1.04 : 1.05,
+        opacity: isLoading ? 0.45 : 0.78,
       }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
+      transition={{ duration: 1.2, ease: "easeInOut" }}
       className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none bg-background flex flex-col"
     >
       {/* Top Banner with gradient */}
@@ -141,11 +141,12 @@ export function AuthShell({
       {/* Light gradient overlay on top of the mock dashboard for a smooth blend */}
       <motion.div 
         animate={{
-          opacity: isLoading ? 0 : 0.2,
-          backdropFilter: isLoading ? "blur(0px)" : "blur(1px)",
+          opacity: isLoading ? 0.55 : 0.22,
+          backdropFilter: isLoading ? "blur(14px)" : "blur(2px)",
         }}
-        transition={{ duration: 1.5, ease: "easeInOut" }}
-        className="absolute inset-0 bg-background pointer-events-none z-[5]" 
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        className="absolute inset-0 bg-background/80 pointer-events-none z-5" 
+        style={{ WebkitBackdropFilter: isLoading ? "blur(14px)" : "blur(2px)" }}
       />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center p-6">
@@ -153,11 +154,11 @@ export function AuthShell({
           initial={{ opacity: 0, y: 20, scale: 0.98, filter: "blur(10px)" }}
           animate={{
             opacity: isLoading ? 0 : 1,
-            y: isLoading ? -30 : 0,
-            scale: isLoading ? 0.95 : 1,
-            filter: isLoading ? "blur(15px)" : "blur(0px)",
+            y: isLoading ? -20 : 0,
+            scale: isLoading ? 0.96 : 1,
+            filter: isLoading ? "blur(10px)" : "blur(0px)",
           }}
-          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className={`w-full ${maxWidth} grid grid-cols-1 md:grid-cols-2 bg-card rounded-2xl overflow-hidden`}
           style={{ boxShadow: "var(--shadow-elegant)" }}
         >
