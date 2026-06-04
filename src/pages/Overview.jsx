@@ -1,4 +1,4 @@
-import { Search, Filter, Plus, MoreHorizontal } from "lucide-react";
+﻿import { Search, Filter, Plus, MoreHorizontal } from "lucide-react";
 
 const members = [
   {
@@ -24,7 +24,7 @@ const members = [
   },
 ];
 
-export default function Overview() {
+const Overview = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Breadcrumb */}
@@ -139,3 +139,5 @@ export default function Overview() {
     </div>
   );
 }
+
+export default Overview
